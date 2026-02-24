@@ -1,0 +1,2 @@
+Implementare la parte iniziale fino al drone inside
+Togliere dal task e dallo scheduler le parti inutili
