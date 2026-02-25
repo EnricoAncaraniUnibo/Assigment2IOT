@@ -5,12 +5,15 @@
 #include "src/model/Hangar.h"
 #include "src/model/Platform.h"
 #include "src/tasks/SweepingTask.h"
+#include "src/kernel/MsgService.h"
+#include "src/kernel/Logger.h"
 
 Scheduler sched;
 Hangar* hangar;
 Platform* p;
 
 void setup() {
+  MsgService.init();
   sched.init(50);
   p = new Platform();
   hangar = new Hangar();
@@ -28,4 +31,18 @@ void setup() {
 
 void loop() {
   sched.schedule();
+  checkCommands();
+}
+
+void checkCommands(){
+  if(MsgService.isMsgAvailable()){
+    Msg* msg = MsgService.receiveMsg();
+    String content = msg->getContent();
+    /*switch(content){
+      case "TAKEOFF": {
+        ...
+      }
+    }*/
+    delete msg;
+  }
 }

@@ -1,2 +1,3 @@
-Implementare la parte iniziale fino al drone inside
+Finire il dru
+togliere le parti inutili dal dru
 Togliere dal task e dallo scheduler le parti inutili
