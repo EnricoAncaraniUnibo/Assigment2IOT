@@ -20,6 +20,10 @@ void setup() {
   p->getL1Led()->switchOn();
   p->getL2Led()->switchOff();
   p->getL3Led()->switchOff();
+  p->getLCD()->init();
+  p->getLCD()->backlight();
+  p->getLCD()->setCursor(4,1);
+  p->getLCD()->print("DRONE INSIDE");
 }
 
 void loop() {

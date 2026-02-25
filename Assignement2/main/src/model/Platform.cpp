@@ -6,6 +6,7 @@ Platform::Platform(){
   l1 = new Led(L1_PIN);
   l2 = new Led(L2_PIN);
   l3 = new Led(L3_PIN);
+  lcd = new LiquidCrystal_I2C(0x27, 20, 4);
 }
 
 ServoTimer2* Platform::getServo(){
@@ -22,4 +23,8 @@ Led* Platform::getL2Led(){
 
 Led* Platform::getL3Led(){
   return this->l3;
+}
+
+LiquidCrystal_I2C* Platform::getLCD(){
+  return this->lcd;
 }
