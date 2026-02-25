@@ -10,6 +10,7 @@ void SweepingTask::tick(){
       state = CLOSE;
       int coeff = (2250-750)/180;
       servo->write(750+0*coeff);
+      this->setActive(false);
     }
   }
 }

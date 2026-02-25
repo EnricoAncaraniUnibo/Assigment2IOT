@@ -17,6 +17,9 @@ void setup() {
   Task* servoTask = new SweepingTask(p->getServo());
   servoTask->init();
   sched.addTask(servoTask);
+  p->getL1Led()->switchOn();
+  p->getL2Led()->switchOff();
+  p->getL3Led()->switchOff();
 }
 
 void loop() {
