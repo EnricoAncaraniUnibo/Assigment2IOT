@@ -28,7 +28,6 @@ void setup() {
   p->getLCD()->backlight();
   p->getLCD()->setCursor(4,1);
   p->getLCD()->print("DRONE INSIDE");
-  
 }
 
 void loop() {
@@ -40,13 +39,44 @@ void checkCommands(){
   if(MsgService.isMsgAvailable()){
     Msg* msg = MsgService.receiveMsg();
     String content = msg->getContent();
-    Logger.log(content);
-    if (content == "cmd:TAKEOFF"){
+    if (content == "cmd:TAKEOFF" && hangar->getState()==DRONE_INSIDE){
+      hangar->setState(TAKING_OFF);
       servoTask->setActive(true);
       p->getLCD()->clear();
       p->getLCD()->setCursor(4,1);
       p->getLCD()->print("TAKE OFF");
     }
     delete msg;
+  }
+  if(hangar->getState()==TAKING_OFF){
+    unsigned long startTime;
+    bool start=false;
+    bool finish=false;
+    startTime=millis();
+    while(finish==false){
+      float d = p->getSonar()->getDistance();
+      Logger.log(String(d));
+      if(d>D1){
+        if(start==false){
+          start=true;
+          startTime=millis();
+        }
+        if(start==true){
+          if(millis()-startTime>T1){
+            hangar->setState(DRONE_OUT);
+            servoTask->setActive(true);
+            p->getLCD()->clear();
+            p->getLCD()->setCursor(4,1);
+            p->getLCD()->print("DRONE_OUT");
+            finish=true;
+          }
+        }
+      }else{
+        if(start==true){
+          start=false;
+        }
+      }
+    }
+    
   }
 }
