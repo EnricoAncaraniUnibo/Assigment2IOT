@@ -28,6 +28,7 @@ void setup() {
   p->getLCD()->backlight();
   p->getLCD()->setCursor(4,1);
   p->getLCD()->print("DRONE INSIDE");
+  
 }
 
 void loop() {
@@ -42,6 +43,9 @@ void checkCommands(){
     Logger.log(content);
     if (content == "cmd:TAKEOFF"){
       servoTask->setActive(true);
+      p->getLCD()->clear();
+      p->getLCD()->setCursor(4,1);
+      p->getLCD()->print("TAKE OFF");
     }
     delete msg;
   }
