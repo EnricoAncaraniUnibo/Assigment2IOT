@@ -1,3 +1,4 @@
 Finire il dru
 togliere le parti inutili dal dru
+migliorare view
 Togliere dal task e dallo scheduler le parti inutili

@@ -36,6 +36,7 @@ void loop() {
 
 void checkCommands(){
   if(MsgService.isMsgAvailable()){
+    p->getLCD()->print("RICEVUTO");
     Msg* msg = MsgService.receiveMsg();
     String content = msg->getContent();
     /*switch(content){
