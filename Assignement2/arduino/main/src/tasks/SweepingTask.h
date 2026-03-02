@@ -7,19 +7,11 @@
 
 class SweepingTask: public Task{
 
-  enum ServoState {
-    IDLE,
-    CLOSE,
-    OPEN,
-    CLOSING,
-    OPENING
-  };
-
   public:
     SweepingTask(ServoTimer2* servo);
     void tick();
   private:
-    ServoState state;
+    char state;
     ServoTimer2* servo;
 };
 

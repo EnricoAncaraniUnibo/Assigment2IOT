@@ -1,5 +1,6 @@
 #include "Scheduler.h"
 #include <TimerOne.h>
+#include "Logger.h"
 
 volatile bool timerFlag;
 
@@ -31,17 +32,9 @@ void Scheduler::schedule(){
   timerFlag = false;
 
   for (int i = 0; i < nTasks; i++){
-    if (taskList[i]->isActive()){
-      if (taskList[i]->isPeriodic()){
-        if (taskList[i]->updateAndCheckTime(basePeriod)){
-          taskList[i]->tick();
-        }
-      } else {
-        taskList[i]->tick();
-        if (taskList[i]->isCompleted()){
-          taskList[i]->setActive(false);
-        }
-      }
+    if (taskList[i]->isActive()==true){
+      taskList[i]->tick();
+      Logger.log(("Qui Entro"+String(i)));
     }
   }
 }

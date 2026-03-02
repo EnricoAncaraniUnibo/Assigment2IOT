@@ -17,7 +17,7 @@ class DRULauncher   {
 		view = new DRUView();
 		log = new LogView();
 		
-		String portName = "/dev/cu.usbmodem112101";
+		String portName = "COM3";
 		DRUController contr = new DRUController(portName,view,log);
 		view.registerController(contr);
 		

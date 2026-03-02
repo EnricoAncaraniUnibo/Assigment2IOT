@@ -11,13 +11,14 @@
 Scheduler sched;
 Hangar* hangar;
 Platform* p;
+Task* servoTask;
 
 void setup() {
   MsgService.init();
   sched.init(50);
   p = new Platform();
   hangar = new Hangar();
-  Task* servoTask = new SweepingTask(p->getServo());
+  servoTask = new SweepingTask(p->getServo());
   servoTask->init();
   sched.addTask(servoTask);
   p->getL1Led()->switchOn();
@@ -36,14 +37,12 @@ void loop() {
 
 void checkCommands(){
   if(MsgService.isMsgAvailable()){
-    p->getLCD()->print("RICEVUTO");
     Msg* msg = MsgService.receiveMsg();
     String content = msg->getContent();
-    /*switch(content){
-      case "TAKEOFF": {
-        ...
-      }
-    }*/
+    Logger.log(content);
+    if (content == "cmd:TAKEOFF"){
+      servoTask->setActive(true);
+    }
     delete msg;
   }
 }
