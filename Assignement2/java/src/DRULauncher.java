@@ -7,23 +7,18 @@
  * Partially implemented.
  * 
  */
-class DashboardLauncher   {
+class DRULauncher   {
 
-	static DashboardView view = null;
+	static DRUView view = null;
 	static LogView log = null;
 
 	public static void main(String[] args) throws Exception {	
-		/*
-		if (args.length != 1){
-			System.err.println("Args: <serial port>");
-			System.exit(1);
-		}*/
 
-		view = new DashboardView();
+		view = new DRUView();
 		log = new LogView();
 		
 		String portName = "/dev/cu.usbmodem112101";
-		DashboardController contr = new DashboardController(portName,view,log);
+		DRUController contr = new DRUController(portName,view,log);
 		view.registerController(contr);
 		
 		view.display();
