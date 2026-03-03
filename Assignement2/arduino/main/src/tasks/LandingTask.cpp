@@ -11,6 +11,13 @@ bool LandingTask::isCompleted(){
   return completed;
 }
 
+void LandingTask::init(){
+  completed = false;
+  state = WAITING;
+  startTime = 0;
+  setActive(true);
+}
+
 void LandingTask::tick(){
   float d = sonar->getDistance();
 

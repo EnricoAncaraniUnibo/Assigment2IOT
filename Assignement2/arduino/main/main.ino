@@ -51,7 +51,7 @@ void checkCommands(){
     String content = msg->getContent();
     if (content == "cmd:TAKEOFF" && hangar->getState()==DRONE_INSIDE){
       hangar->setState(TAKING_OFF);
-      takingOffTask->setActive(true);
+      takingOffTask->init();
       servoTask->setActive(true);
       p->getLCD()->clear();
       p->getLCD()->setCursor(4,1);
@@ -61,7 +61,7 @@ void checkCommands(){
       p->getPir()->sync();
       if(p->getPir()->isDetected()){
         hangar->setState(LANDING);
-        landingTask->setActive(true);
+        landingTask->init();
         servoTask->setActive(true);
         p->getLCD()->clear();
         p->getLCD()->setCursor(4,1);

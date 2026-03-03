@@ -13,7 +13,7 @@ public:
   TakingOffTask(Sonar* sonar);
   bool isCompleted();
   void tick();
-
+  void init();
 private:
   TakingOffState state;
   Sonar* sonar;

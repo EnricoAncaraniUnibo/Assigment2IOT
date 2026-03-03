@@ -13,7 +13,7 @@ public:
   LandingTask(Sonar* sonar);
   bool isCompleted();
   void tick();
-
+  void init();
 private:
   LandingState state;
   Sonar* sonar;

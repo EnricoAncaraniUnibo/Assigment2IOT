@@ -11,6 +11,13 @@ bool TakingOffTask::isCompleted(){
   return completed;
 }
 
+void TakingOffTask::init(){
+  completed = false;
+  state = WAITING;
+  startTime = 0;
+  setActive(true);
+}
+
 void TakingOffTask::tick(){
   float d = sonar->getDistance();
 
