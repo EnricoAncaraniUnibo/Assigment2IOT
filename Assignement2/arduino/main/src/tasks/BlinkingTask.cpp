@@ -6,7 +6,7 @@ BlinkingTask::BlinkingTask(Led* led): led(led){
 }
 
 void BlinkingTask::tick(){
-  if(millis()-lastTimeBlink>=0.5){
+  if(millis()-lastTimeBlink>=500){
     if(state==ON){
     led->switchOff();
     state=OFF;
