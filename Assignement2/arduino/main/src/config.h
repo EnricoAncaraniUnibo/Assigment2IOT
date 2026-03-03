@@ -12,5 +12,8 @@
 #define PIR_PIN 2
 #define D2 0.13
 #define T2 1000
+#define TEMPSENSOR_PIN A0
+#define Temp1 16
+#define T3 1000
 
 #endif

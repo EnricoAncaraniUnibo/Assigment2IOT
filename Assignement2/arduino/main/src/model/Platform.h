@@ -19,6 +19,8 @@ class Platform {
   Sonar* getSonar();
   LiquidCrystal_I2C* getLCD();
   Pir* getPir();
+  TempSensorTMP36* getTempSensor();
+  
   private:
   ServoTimer2* servo;
   Led* l1;
@@ -27,6 +29,7 @@ class Platform {
   LiquidCrystal_I2C* lcd;
   Sonar* s;
   Pir* pi;
+  TempSensorTMP36* tempSensor;
 };
 
 #endif
