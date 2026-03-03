@@ -6,6 +6,7 @@
 #include "../devices/Led.h"
 #include <LiquidCrystal_I2C.h>
 #include "../devices/Sonar.h"
+#include "../devices/Pir.h"
 
 class Platform {
 
@@ -17,6 +18,7 @@ class Platform {
   Led* getL3Led();
   Sonar* getSonar();
   LiquidCrystal_I2C* getLCD();
+  Pir* getPir();
   private:
   ServoTimer2* servo;
   Led* l1;
@@ -24,6 +26,7 @@ class Platform {
   Led* l3;
   LiquidCrystal_I2C* lcd;
   Sonar* s;
+  Pir* pi;
 };
 
 #endif

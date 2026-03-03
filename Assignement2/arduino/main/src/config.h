@@ -8,6 +8,9 @@
 #define SONAR_TRIG_PIN 8
 #define SONAR_ECHO_PIN 7
 #define D1 0.13
-#define T1 4000
+#define T1 1000
+#define PIR_PIN 2
+#define D2 0.13
+#define T2 1000
 
 #endif

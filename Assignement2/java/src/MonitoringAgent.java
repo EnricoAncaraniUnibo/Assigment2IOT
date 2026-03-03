@@ -21,9 +21,17 @@ public class MonitoringAgent extends Thread {
 			try {
 				String msg = channel.receiveMsg();		
 				if (msg.startsWith(STATE_PREFIX)){
-					String state = msg.substring(STATE_PREFIX.length()); 
-					logger.log("state: "+state);
-					view.setHangarState(state);
+				    String stateStr = msg.substring(STATE_PREFIX.length());
+				    int stateCode = Integer.parseInt(stateStr);
+				    
+				    switch(stateCode){
+				        case 0: view.setHangarState("DRONE INSIDE"); break;
+				        case 1: view.setHangarState("TAKING OFF");   break;
+				        case 2: view.setHangarState("DRONE OUT");    break;
+				        case 3: view.setHangarState("LANDING");      break;
+				        case 4: view.setHangarState("PRE ALARM");    break;
+				        case 5: view.setHangarState("ALARM");        break;
+				    }
 				} else if (msg.startsWith(DIST_PREFIX)){
 				    String dist = msg.substring(DIST_PREFIX.length());
                     view.setDistance(dist);

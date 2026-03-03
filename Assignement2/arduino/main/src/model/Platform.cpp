@@ -8,6 +8,7 @@ Platform::Platform(){
   l3 = new Led(L3_PIN);
   lcd = new LiquidCrystal_I2C(0x27, 20, 4);
   s = new Sonar(SONAR_TRIG_PIN,SONAR_ECHO_PIN);
+  pi = new Pir(PIR_PIN);
 }
 
 ServoTimer2* Platform::getServo(){
@@ -32,4 +33,8 @@ LiquidCrystal_I2C* Platform::getLCD(){
 
 Sonar* Platform::getSonar(){
   return this->s;
+}
+
+Pir* Platform::getPir(){
+  return this->pi;
 }
