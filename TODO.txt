@@ -1,4 +1,4 @@
-Capire perché led sbalena più in fretta
+
 Controllare che per drone out e in la distanza sia giusta del ddd, si può controllare fatta bene la gui
 Mettere la temperatura variabile in base alla stanza nelle impostazioni del sonar
 Finire il dru
