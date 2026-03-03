@@ -7,7 +7,7 @@
 
 class LandingTask : public Task {
 
-  enum LandingState { WAITING, COUNTING };
+enum LandingState { WAITING, COUNTING };
 
 public:
   LandingTask(Sonar* sonar);

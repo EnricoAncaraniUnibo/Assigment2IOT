@@ -9,6 +9,7 @@
 #include "src/kernel/Logger.h"
 #include "src/tasks/TakingOffTask.h"
 #include "src/tasks/LandingTask.h"
+#include "src/tasks/BlinkingTask.h"
 
 Scheduler sched;
 Hangar* hangar;
@@ -16,6 +17,7 @@ Platform* p;
 Task* servoTask;
 TakingOffTask* takingOffTask;
 LandingTask* landingTask;
+BlinkingTask* blinkingTask;
 
 void setup() {
   MsgService.init();
@@ -25,10 +27,12 @@ void setup() {
   servoTask = new SweepingTask(p->getServo());
   takingOffTask = new TakingOffTask(p->getSonar());
   landingTask = new LandingTask(p->getSonar());
+  blinkingTask = new BlinkingTask(p->getL2Led());
   servoTask->init();
   sched.addTask(servoTask);
   sched.addTask(takingOffTask);
   sched.addTask(landingTask);
+  sched.addTask(blinkingTask);
   p->getPir()->calibrate();
   p->getL1Led()->switchOn();
   p->getL2Led()->switchOff();
@@ -51,6 +55,7 @@ void checkCommands(){
     String content = msg->getContent();
     if (content == "cmd:TAKEOFF" && hangar->getState()==DRONE_INSIDE){
       hangar->setState(TAKING_OFF);
+      blinkingTask->setActive(true);
       takingOffTask->init();
       servoTask->setActive(true);
       p->getLCD()->clear();
@@ -61,6 +66,7 @@ void checkCommands(){
       p->getPir()->sync();
       if(p->getPir()->isDetected()){
         hangar->setState(LANDING);
+        blinkingTask->setActive(true);
         landingTask->init();
         servoTask->setActive(true);
         p->getLCD()->clear();
@@ -74,6 +80,7 @@ void checkCommands(){
 void checkTasksCompleted(){
   if(takingOffTask->isCompleted() && hangar->getState() == TAKING_OFF){
     hangar->setState(DRONE_OUT);
+    blinkingTask->stop();
     servoTask->setActive(true);
     p->getLCD()->clear();
     p->getLCD()->setCursor(4,1);
@@ -81,6 +88,7 @@ void checkTasksCompleted(){
   }
   if(landingTask->isCompleted() && hangar->getState() == LANDING){
     hangar->setState(DRONE_INSIDE);
+    blinkingTask->stop();
     servoTask->setActive(true); 
     p->getLCD()->clear();
     p->getLCD()->setCursor(4,1);

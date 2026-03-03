@@ -7,7 +7,7 @@
 
 class TakingOffTask : public Task {
 
-  enum TakingOffState { WAITING, COUNTING };
+enum TakingOffState { WAITING, COUNTING };
 
 public:
   TakingOffTask(Sonar* sonar);
