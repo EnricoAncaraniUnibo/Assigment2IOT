@@ -4,6 +4,7 @@
 #include "../kernel/Task.h"
 #include <Arduino.h>
 #include "../devices/TempSensorTMP36.h"
+#include "../config.h"
 
 class CheckingTemperatureTask : public Task {
 

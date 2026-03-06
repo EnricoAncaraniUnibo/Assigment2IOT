@@ -23,14 +23,32 @@ public class MonitoringAgent extends Thread {
 				if (msg.startsWith(STATE_PREFIX)){
 				    String stateStr = msg.substring(STATE_PREFIX.length());
 				    int stateCode = Integer.parseInt(stateStr);
-				    
+
 				    switch(stateCode){
-				        case 0: view.setHangarState("DRONE INSIDE"); break;
-				        case 1: view.setHangarState("TAKING OFF");   break;
-				        case 2: view.setHangarState("DRONE OUT");    break;
-				        case 3: view.setHangarState("LANDING");      break;
-				        case 4: view.setHangarState("PRE ALARM");    break;
-				        case 5: view.setHangarState("ALARM");        break;
+				        case 0: // DRONE_INSIDE
+				            view.setDroneState("REST");
+				            view.setHangarState("NORMAL");
+				            break;
+				        case 1: // TAKING_OFF
+				            view.setDroneState("TAKING OFF");
+				            view.setHangarState("NORMAL");
+				            break;
+				        case 2: // DRONE_OUT
+				            view.setDroneState("OPERATING");
+				            view.setHangarState("NORMAL");
+				            break;
+				        case 3: // LANDING
+				            view.setDroneState("LANDING");
+				            view.setHangarState("NORMAL");
+				            break;
+				        case 4: // PRE_ALARM
+				            view.setDroneState("--");
+				            view.setHangarState("PRE ALARM");
+				            break;
+				        case 5: // ALARM
+				            view.setDroneState("--");
+				            view.setHangarState("ALARM");
+				            break;
 				    }
 				} else if (msg.startsWith(DIST_PREFIX)){
 				    String dist = msg.substring(DIST_PREFIX.length());

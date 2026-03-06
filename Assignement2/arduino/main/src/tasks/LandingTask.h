@@ -4,6 +4,7 @@
 #include "../kernel/Task.h"
 #include <Arduino.h>
 #include "../devices/Sonar.h"
+#include "../kernel/MsgService.h"
 
 class LandingTask : public Task {
 

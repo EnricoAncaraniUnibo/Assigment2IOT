@@ -3,7 +3,6 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class DRUView extends JFrame implements ActionListener {
-
     private JButton takeOffButton;
     private JButton landButton;
     private JTextField hangarStateField;
@@ -30,7 +29,7 @@ public class DRUView extends JFrame implements ActionListener {
 
         JPanel dronePanel = new JPanel();
         dronePanel.setLayout(new BoxLayout(dronePanel, BoxLayout.LINE_AXIS));
-        droneStateField = new JTextField("INSIDE");
+        droneStateField = new JTextField("REST");
         droneStateField.setEditable(false);
         dronePanel.add(new JLabel("Drone state:  "));
         dronePanel.add(droneStateField);
@@ -56,7 +55,6 @@ public class DRUView extends JFrame implements ActionListener {
         mainPanel.add(buttonPanel);
 
         setContentPane(mainPanel);
-
         addWindowListener(new WindowAdapter(){
             public void windowClosing(WindowEvent ev){
                 System.exit(-1);
@@ -73,17 +71,11 @@ public class DRUView extends JFrame implements ActionListener {
     }
 
     public void setHangarState(String state){
-        SwingUtilities.invokeLater(() -> {
-            hangarStateField.setText(state);
-            switch(state){
-                case "DRONE_INSIDE": droneStateField.setText("INSIDE"); break;
-                case "TAKING_OFF":   droneStateField.setText("TAKING OFF"); break;
-                case "DRONE_OUT":    droneStateField.setText("OUT"); break;
-                case "LANDING":      droneStateField.setText("LANDING"); break;
-                case "PRE_ALARM":    hangarStateField.setText("PRE-ALARM"); break;
-                case "ALARM":        hangarStateField.setText("ALARM"); break;
-            }
-        });
+        SwingUtilities.invokeLater(() -> hangarStateField.setText(state));
+    }
+
+    public void setDroneState(String state){
+        SwingUtilities.invokeLater(() -> droneStateField.setText(state));
     }
 
     public void setDistance(String dist){

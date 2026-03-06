@@ -20,7 +20,7 @@ void LandingTask::init(){
 
 void LandingTask::tick(){
   float d = sonar->getDistance();
-
+  MsgService.sendMsg("dist:" + String(d));
   if(state == WAITING){
     if(d < D2){
       state = COUNTING;

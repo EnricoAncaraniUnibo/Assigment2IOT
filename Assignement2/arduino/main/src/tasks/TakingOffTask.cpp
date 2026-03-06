@@ -20,7 +20,7 @@ void TakingOffTask::init(){
 
 void TakingOffTask::tick(){
   float d = sonar->getDistance();
-
+  MsgService.sendMsg("dist:" + String(d));
   if(state == WAITING){
     if(d > D1){
       state = COUNTING;

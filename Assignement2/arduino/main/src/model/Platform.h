@@ -7,6 +7,7 @@
 #include <LiquidCrystal_I2C.h>
 #include "../devices/Sonar.h"
 #include "../devices/Pir.h"
+#include "../devices/TempSensorTMP36.h"
 
 class Platform {
 
