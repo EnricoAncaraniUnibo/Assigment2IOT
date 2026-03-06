@@ -7,9 +7,9 @@ Platform::Platform(){
   l2 = new Led(L2_PIN);
   l3 = new Led(L3_PIN);
   lcd = new LiquidCrystal_I2C(0x27, 20, 4);
-  s = new Sonar(SONAR_TRIG_PIN,SONAR_ECHO_PIN);
-  pi = new Pir(PIR_PIN);
   tempSensor = new TempSensorTMP36(TEMPSENSOR_PIN);
+  s = new Sonar(SONAR_TRIG_PIN,SONAR_ECHO_PIN,tempSensor->getTemperature());
+  pi = new Pir(PIR_PIN);
 }
 
 ServoTimer2* Platform::getServo(){

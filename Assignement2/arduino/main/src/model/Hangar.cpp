@@ -11,3 +11,11 @@ HangarState Hangar::getState(){
 void Hangar::setState(HangarState s){
   currentState = s;
 }
+
+void Hangar::setBackUp(HangarState s){
+  backupState = s;
+}
+
+HangarState Hangar::getBackUp(){
+  return this->backupState;
+}

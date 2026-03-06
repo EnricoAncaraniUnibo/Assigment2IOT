@@ -17,9 +17,11 @@ public:
 
   HangarState getState();
   void setState(HangarState s);
+  void setBackUp(HangarState s);
+  HangarState getBackUp();
 
 private:
-
+  HangarState backupState;
   HangarState currentState;
 };
 

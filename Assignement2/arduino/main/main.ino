@@ -10,7 +10,7 @@
 #include "src/tasks/TakingOffTask.h"
 #include "src/tasks/LandingTask.h"
 #include "src/tasks/BlinkingTask.h"
-#include "src/devices/TempSensorTMP36.h"
+#include "src/tasks/CheckingTemperatureTask.h"
 
 Scheduler sched;
 Hangar* hangar;
@@ -19,6 +19,7 @@ Task* servoTask;
 TakingOffTask* takingOffTask;
 LandingTask* landingTask;
 BlinkingTask* blinkingTask;
+CheckingTemperatureTask* checkingTempTask;
 
 void setup() {
   MsgService.init();
@@ -30,11 +31,14 @@ void setup() {
   takingOffTask = new TakingOffTask(p->getSonar());
   landingTask = new LandingTask(p->getSonar());
   blinkingTask = new BlinkingTask(p->getL2Led());
+  checkingTempTask = new CheckingTemperatureTask(p->getTempSensor());
+  checkingTempTask->setActive(true);
   servoTask->init();
   sched.addTask(servoTask);
   sched.addTask(takingOffTask);
   sched.addTask(landingTask);
   sched.addTask(blinkingTask);
+  sched.addTask(checkingTempTask);
   p->getPir()->calibrate();
   p->getL1Led()->switchOn();
   p->getL2Led()->switchOff();
@@ -82,8 +86,12 @@ void checkCommands(){
   }
 }
 void checkTasksCompleted(){
-  if(takingOffTask->isCompleted() && hangar->getState() == TAKING_OFF){
-    hangar->setState(DRONE_OUT);
+  if(takingOffTask->isCompleted() && (hangar->getState() == TAKING_OFF || hangar->getBackUp() == TAKING_OFF)){
+    if(hangar->getState() == TAKING_OFF){
+      hangar->setState(DRONE_OUT);
+    }else{
+      hangar->setBackUp(DRONE_OUT);
+    }
     MsgService.sendMsg("st:" + String(hangar->getState()));
     blinkingTask->stop();
     servoTask->setActive(true);
@@ -91,8 +99,12 @@ void checkTasksCompleted(){
     p->getLCD()->setCursor(4,1);
     p->getLCD()->print("DRONE OUT");
   }
-  if(landingTask->isCompleted() && hangar->getState() == LANDING){
-    hangar->setState(DRONE_INSIDE);
+  if(landingTask->isCompleted() && (hangar->getState() == LANDING || hangar->getBackUp() == LANDING)){
+    if(hangar->getState() == LANDING){
+      hangar->setState(DRONE_INSIDE);
+    }else{
+      hangar->setBackUp(DRONE_INSIDE);
+    }
     MsgService.sendMsg("st:" + String(hangar->getState()));
     blinkingTask->stop();
     servoTask->setActive(true); 

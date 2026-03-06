@@ -1,10 +1,10 @@
 #include "Sonar.h"
 #include "Arduino.h"
 
-Sonar::Sonar(int trigPin, int echoPin){
+Sonar::Sonar(int trigPin, int echoPin, float temp){
   this->trigPin = trigPin;
   this->echoPin = echoPin;
-  float temperature = 20;
+  float temperature = temp;
   vs = 331.45 + 0.62 * temperature;
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);

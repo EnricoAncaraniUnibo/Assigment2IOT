@@ -5,7 +5,7 @@
 
 class Sonar {
 public:
-  Sonar(int trigPin, int echoPin);
+  Sonar(int trigPin, int echoPin, float temperature);
   float getDistance();
 
 private:
