@@ -66,10 +66,6 @@ void checkCommands(){
       p->getLCD()->print("TAKE OFF");
     }
     if (content == "cmd:LAND" && hangar->getState()==DRONE_OUT){
-      while(true){
-        p->getPir()->sync();
-        Logger.log((String(p->getPir()->isDetected())));
-      }
       p->getPir()->sync();
       if(p->getPir()->isDetected()){
         hangar->setState(LANDING);

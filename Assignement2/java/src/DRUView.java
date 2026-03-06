@@ -39,7 +39,7 @@ public class DRUView extends JFrame implements ActionListener {
         distPanel.setLayout(new BoxLayout(distPanel, BoxLayout.LINE_AXIS));
         distanceField = new JTextField("--");
         distanceField.setEditable(false);
-        distPanel.add(new JLabel("Distance (cm): "));
+        distPanel.add(new JLabel("Distance: "));
         distPanel.add(distanceField);
         mainPanel.add(distPanel);
 
