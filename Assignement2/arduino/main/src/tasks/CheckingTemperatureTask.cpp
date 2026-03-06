@@ -1,6 +1,6 @@
 #include "CheckingTemperatureTask.h"
 
-CheckingTemperatureTask::CheckingTemperatureTask(TempSensorTMP36* sensor, Hangar* han, Platform* p): sensor(sensor),hangar(han),p(p){
+CheckingTemperatureTask::CheckingTemperatureTask(TempSensorTMP36* sensor): sensor(sensor){
   state=IDLE;
   startTime=0;
 }
