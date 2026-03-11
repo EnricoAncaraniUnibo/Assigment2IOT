@@ -179,5 +179,5 @@ void checkTasksCompleted(){
       MsgService.sendMsg("dr:" + String("DRONE INSIDE"));
     }
   }
-  
+
 }
