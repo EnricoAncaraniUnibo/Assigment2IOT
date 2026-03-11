@@ -8,6 +8,7 @@
 #include "../devices/Sonar.h"
 #include "../devices/Pir.h"
 #include "../devices/TempSensorTMP36.h"
+#include "../devices/ButtonImpl.h"
 
 class Platform {
 
@@ -21,6 +22,7 @@ class Platform {
   LiquidCrystal_I2C* getLCD();
   Pir* getPir();
   TempSensorTMP36* getTempSensor();
+  ButtonImpl* getButton();
   
   private:
   ServoTimer2* servo;
@@ -31,6 +33,7 @@ class Platform {
   Sonar* s;
   Pir* pi;
   TempSensorTMP36* tempSensor;
+  ButtonImpl* but;
 };
 
 #endif

@@ -7,11 +7,11 @@ CheckingTemperatureTask::CheckingTemperatureTask(TempSensorTMP36* sensor): senso
 
 void CheckingTemperatureTask::tick(){
   temp=sensor->getTemperature();
-  if(state==WARMINGPLUS){
+  Logger.log("Temp=" + String(temp));
+  if(state==WARMING_PLUS){
     if(temp>Temp2){
       if(millis()-startTime>T4){
         state=ALARM;
-        hangar->setState(ALARM);
         setActive(false);
       }
     }else{
@@ -21,7 +21,6 @@ void CheckingTemperatureTask::tick(){
 
   if(state==PRE_ALARM){
     if(temp<Temp1){
-      hangar->setState(hangar->getBackUp());
       state=IDLE;
     }
     if(temp>Temp2){
@@ -39,8 +38,6 @@ void CheckingTemperatureTask::tick(){
     if(temp>Temp1){
       if(millis()-startTime>T3){
         state=PRE_ALARM;
-        hangar->setBackUp(hangar->getState());
-        hangar->setState(PRE_ALARM);
       }
     }else{
       state=IDLE;
@@ -49,6 +46,9 @@ void CheckingTemperatureTask::tick(){
 }
 
 void CheckingTemperatureTask::reset(){
-  hangar->setState(hangar->getBackUp());
   state=IDLE;
+}
+
+CheckingTemperatureTask::TemperatureState CheckingTemperatureTask::getStatus(){
+  return state;
 }

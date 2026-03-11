@@ -15,13 +15,14 @@
 Scheduler sched;
 Hangar* hangar;
 Platform* p;
-Task* servoTask;
+SweepingTask* servoTask;
 TakingOffTask* takingOffTask;
 LandingTask* landingTask;
 BlinkingTask* blinkingTask;
 CheckingTemperatureTask* checkingTempTask;
 
 void setup() {
+  Logger.log("Setup started");
   MsgService.init();
   sched.init(50);
   p = new Platform();
@@ -47,19 +48,48 @@ void setup() {
   p->getLCD()->backlight();
   p->getLCD()->setCursor(4,1);
   p->getLCD()->print("DRONE INSIDE");
+  Logger.log("Setup completed");
 }
 
 void loop() {
-  sched.schedule();
-  checkTasksCompleted();
-  checkCommands();
+  if(hangar->getState()==ALARM){
+    checkReset();
+  }else {
+    sched.schedule();
+    checkTasksCompleted();
+    checkCommands();
+  }
+  
+}
+
+void checkReset(){
+  if(p->getButton()->isPressed()){
+    Logger.log("RESET pressed");
+    checkingTempTask->reset();
+    HangarState temp = hangar->getState();
+    hangar->setState(hangar->getBackUp());
+    hangar->setBackUp(temp);
+    p->getL3Led()->switchOff();
+    p->getLCD()->clear();
+    p->getLCD()->setCursor(4,1);
+    switch(hangar->getState()){
+      case DRONE_INSIDE: p->getLCD()->print("DRONE INSIDE"); break;
+      case DRONE_OUT:    p->getLCD()->print("DRONE OUT");   break;
+      case TAKING_OFF:   p->getLCD()->print("TAKE OFF");  servoTask->setActive(true); blinkingTask->setActive(true);  break;
+      case LANDING:      p->getLCD()->print("LANDING");   servoTask->setActive(true); blinkingTask->setActive(true);  break;
+    }
+    MsgService.sendMsg("st:" + String(hangar->getState()));
+    checkingTempTask->setActive(true);
+  }
 }
 
 void checkCommands(){
   if(MsgService.isMsgAvailable()){
     Msg* msg = MsgService.receiveMsg();
     String content = msg->getContent();
+    Logger.log("Received: " + content);
     if (content == "cmd:TAKEOFF" && hangar->getState()==DRONE_INSIDE){
+      Logger.log("TAKEOFF accepted");
       hangar->setState(TAKING_OFF);
       MsgService.sendMsg("st:" + String(hangar->getState()));
       blinkingTask->setActive(true);
@@ -71,7 +101,9 @@ void checkCommands(){
     }
     if (content == "cmd:LAND" && hangar->getState()==DRONE_OUT){
       p->getPir()->sync();
+      Logger.log("PIR detected=" + String(p->getPir()->isDetected()));
       if(p->getPir()->isDetected()){
+        Logger.log("LAND accepted");
         hangar->setState(LANDING);
         MsgService.sendMsg("st:" + String(hangar->getState()));
         blinkingTask->setActive(true);
@@ -86,30 +118,69 @@ void checkCommands(){
   }
 }
 void checkTasksCompleted(){
-  if(takingOffTask->isCompleted() && (hangar->getState() == TAKING_OFF || hangar->getBackUp() == TAKING_OFF)){
+  CheckingTemperatureTask::TemperatureState tempState = checkingTempTask->getStatus();
+  delay(5000);
+  Logger.log("TempState=" + String(tempState));
+  Logger.log("HangarState=" + String(hangar->getState()));
+  if(hangar->getState()==PRE_ALARM){
+    if(tempState!=CheckingTemperatureTask::PRE_ALARM && tempState!=CheckingTemperatureTask::ALARM && tempState!=CheckingTemperatureTask::WARMING_PLUS){
+      HangarState temp = hangar->getState();
+      hangar->setState(hangar->getBackUp());
+      hangar->setBackUp(temp);
+      MsgService.sendMsg("st:" + String(hangar->getState()));
+      p->getL3Led()->switchOff();
+    }
+  }else {
+    if(tempState==CheckingTemperatureTask::PRE_ALARM){
+    hangar->setBackUp(hangar->getState());
+    hangar->setState(PRE_ALARM);
+    MsgService.sendMsg("st:" + String(hangar->getState()));
+  }
+  }
+
+  if(tempState==CheckingTemperatureTask::ALARM){
+    hangar->setState(ALARM);
+    p->getL3Led()->switchOn();
+    servoTask->close();
+    blinkingTask->stop();
+    p->getLCD()->clear();
+    p->getLCD()->setCursor(4,1);
+    p->getLCD()->print("ALARM");
+    if(hangar->getBackUp() == DRONE_OUT){
+      MsgService.sendMsg("alarm:ALARM");
+    }
+    MsgService.sendMsg("st:" + String(hangar->getState()));
+  }
+  
+  if(hangar->getState()!=ALARM){
+    if(takingOffTask->isCompleted() && (hangar->getState() == TAKING_OFF || hangar->getBackUp() == TAKING_OFF)){
     if(hangar->getState() == TAKING_OFF){
       hangar->setState(DRONE_OUT);
     }else{
       hangar->setBackUp(DRONE_OUT);
     }
-    MsgService.sendMsg("st:" + String(hangar->getState()));
     blinkingTask->stop();
     servoTask->setActive(true);
     p->getLCD()->clear();
     p->getLCD()->setCursor(4,1);
     p->getLCD()->print("DRONE OUT");
-  }
-  if(landingTask->isCompleted() && (hangar->getState() == LANDING || hangar->getBackUp() == LANDING)){
-    if(hangar->getState() == LANDING){
-      hangar->setState(DRONE_INSIDE);
-    }else{
-      hangar->setBackUp(DRONE_INSIDE);
-    }
     MsgService.sendMsg("st:" + String(hangar->getState()));
-    blinkingTask->stop();
-    servoTask->setActive(true); 
-    p->getLCD()->clear();
-    p->getLCD()->setCursor(4,1);
-    p->getLCD()->print("DRONE INSIDE");
+    MsgService.sendMsg("dr:" + String("DRONE OUT"));
+    }
+    if(landingTask->isCompleted() && (hangar->getState() == LANDING || hangar->getBackUp() == LANDING)){
+      if(hangar->getState() == LANDING){
+        hangar->setState(DRONE_INSIDE);
+      }else{
+        hangar->setBackUp(DRONE_INSIDE);
+      }
+      blinkingTask->stop();
+      servoTask->setActive(true); 
+      p->getLCD()->clear();
+      p->getLCD()->setCursor(4,1);
+      p->getLCD()->print("DRONE INSIDE");
+      MsgService.sendMsg("st:" + String(hangar->getState()));
+      MsgService.sendMsg("dr:" + String("DRONE INSIDE"));
+    }
   }
+  
 }

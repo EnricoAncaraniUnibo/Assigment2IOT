@@ -13,9 +13,11 @@
 #define D2 0.13
 #define T2 1000
 #define TEMPSENSOR_PIN A0
-#define Temp1 16
-#define Temp2 24
+#define Temp1 5
+#define Temp2 5
 #define T3 1000
 #define T4 1000
+#define TEMP_CALIBRATION_OFFSET -21;
+#define BUTTON_PIN 11
 
 #endif

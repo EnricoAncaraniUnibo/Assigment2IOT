@@ -1,5 +1,6 @@
 #include "TempSensorTMP36.h"
 #include "Arduino.h"
+#include "../config.h"
 
 #define VCC ((float)5)
 
@@ -36,7 +37,7 @@ float TempSensorTMP36::getTemperature(){
   for (int i = 0; i < 5; i++){
     int value = analogRead(pin);
     /* this is the formula for the TMP36*/
-    float valueInCelsius = ((value * 0.00488) - 0.5) / 0.01;
+    float valueInCelsius = (((value * 0.00488) - 0.5) / 0.01) + TEMP_CALIBRATION_OFFSET;
     values[i] = valueInCelsius;    
     if (valueInCelsius < min){
       min = valueInCelsius;

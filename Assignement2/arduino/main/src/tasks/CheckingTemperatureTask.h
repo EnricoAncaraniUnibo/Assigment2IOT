@@ -5,16 +5,18 @@
 #include <Arduino.h>
 #include "../devices/TempSensorTMP36.h"
 #include "../config.h"
-#include "../model/Hangar.h"
+#include "../kernel/Logger.h"
 
 class CheckingTemperatureTask : public Task {
 
-enum TemperatureState { IDLE,WARMING, PREALARM,WARMING_PLUS, ALARM };
+
 
 public:
+  enum TemperatureState { IDLE,WARMING, PRE_ALARM,WARMING_PLUS, ALARM };
   CheckingTemperatureTask(TempSensorTMP36* sensor);
   void tick();
   void reset();
+  TemperatureState getStatus();
 
 private:
   TemperatureState state;

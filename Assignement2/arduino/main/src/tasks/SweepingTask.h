@@ -12,6 +12,8 @@ class SweepingTask: public Task{
   public:
     SweepingTask(ServoTimer2* servo);
     void tick();
+    void close();
+    void open();
   private:
     SweepingState state;
     ServoTimer2* servo;

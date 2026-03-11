@@ -10,6 +10,7 @@ Platform::Platform(){
   tempSensor = new TempSensorTMP36(TEMPSENSOR_PIN);
   s = new Sonar(SONAR_TRIG_PIN,SONAR_ECHO_PIN,tempSensor->getTemperature());
   pi = new Pir(PIR_PIN);
+  but= new ButtonImpl(BUTTON_PIN);
 }
 
 ServoTimer2* Platform::getServo(){
@@ -42,4 +43,8 @@ Pir* Platform::getPir(){
 
 TempSensorTMP36* Platform::getTempSensor(){
   return this->tempSensor;
+}
+
+ButtonImpl* Platform::getButton(){
+  return this->but;
 }
