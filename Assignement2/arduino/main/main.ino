@@ -119,9 +119,6 @@ void checkCommands(){
 }
 void checkTasksCompleted(){
   CheckingTemperatureTask::TemperatureState tempState = checkingTempTask->getStatus();
-  delay(5000);
-  Logger.log("TempState=" + String(tempState));
-  Logger.log("HangarState=" + String(hangar->getState()));
   if(hangar->getState()==PRE_ALARM){
     if(tempState!=CheckingTemperatureTask::PRE_ALARM && tempState!=CheckingTemperatureTask::ALARM && tempState!=CheckingTemperatureTask::WARMING_PLUS){
       HangarState temp = hangar->getState();

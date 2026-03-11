@@ -7,7 +7,6 @@ CheckingTemperatureTask::CheckingTemperatureTask(TempSensorTMP36* sensor): senso
 
 void CheckingTemperatureTask::tick(){
   temp=sensor->getTemperature();
-  Logger.log("Temp=" + String(temp));
   if(state==WARMING_PLUS){
     if(temp>Temp2){
       if(millis()-startTime>T4){
